@@ -5,6 +5,8 @@ import { ResponseBody } from '../../lib'
 import { SERVER_CONFIG } from '../../config'
 
 import { AuthRouter } from './Auth'
+import { CategoryRouter } from './Category'
+import { ProductRouter } from './Product'
 
 const { version } = packageJSON
 
@@ -12,6 +14,8 @@ const { SERVICE_NAME } = SERVER_CONFIG
 
 const Routes = [
   { path: '/auth', router: AuthRouter },
+  { path: '/product', router: ProductRouter },
+  { path: '/category', router: CategoryRouter },
 ]
 Routes.init = (app) => {
   if (!app || !app.use) {
