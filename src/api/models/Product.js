@@ -1,6 +1,6 @@
 "use strict";
 
-import { MONGO_MODEL } from ".";
+import { CommonModel, MONGO_MODEL } from ".";
 
 const getProducts = async (headers) => {
   const products = await MONGO_MODEL.mongoFind("products", {});
