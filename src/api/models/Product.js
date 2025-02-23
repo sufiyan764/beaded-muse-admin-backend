@@ -12,6 +12,11 @@ const addProduct = async (body) => {
   const id = await CommonModel.counter("products");
   const insertObj = { id, categoryId, name, description, price, stock, images, size, color, neckline, fit, sleeveType, length, rating };
   await MONGO_MODEL.mongoInsertOne("products", insertObj);
+  return {
+    status: true,
+    statusCode: 200,
+    message: "Product added successfully",
+  };
 };
 
 const detailProduct = async (headers) => {

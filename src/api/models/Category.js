@@ -16,6 +16,11 @@ const addCategory = async (body) => {
     description,
   };
   await MONGO_MODEL.mongoInsertOne("categories", insertObj);
+  return {
+    status: true,
+    statusCode: 200,
+    message: "Category added successfully",
+  };
 };
 
 const detailCategory = async (headers) => {
