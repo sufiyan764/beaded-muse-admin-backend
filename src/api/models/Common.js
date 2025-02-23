@@ -8,8 +8,7 @@ const counter = async (counterName) => {
       [counterName]: 1
     }
   });
-  
-  return sequenceCount?.value?.[counter] || 1
+  return sequenceCount?.value[counterName] || 1
 }
 
 const getAdminName = async (_id) => {
