@@ -24,13 +24,15 @@ const addCategory = async (body) => {
 };
 
 const detailCategory = async (headers) => {
-  const { id } = headers;
+  let { id } = headers;
+  id = parseInt(id)
   const category = await MONGO_MODEL.mongoFindOne("categories", { id });
   return category;
 };
 
 const deleteCategory = async (headers) => {
-  const { id } = headers;
+  let { id } = headers;
+  id = parseInt(id)
   await MONGO_MODEL.mongoDeleteOne("categories", { id });
   return {
     status: true,

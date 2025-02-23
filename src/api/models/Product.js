@@ -20,13 +20,15 @@ const addProduct = async (body) => {
 };
 
 const detailProduct = async (headers) => {
-  const { id } = headers;
+  let { id } = headers;
+  id = parseInt(id)
   const product = await MONGO_MODEL.mongoFindOne("products", { id });
   return product;
 };
 
 const deleteProduct = async (headers) => {
-  const { id } = headers;
+  let { id } = headers;
+  id = parseInt(id)
   await MONGO_MODEL.mongoDeleteOne("products", { id });
   return {
     status: true,
