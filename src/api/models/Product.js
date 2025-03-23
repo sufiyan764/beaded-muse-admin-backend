@@ -68,8 +68,8 @@ const updateProduct = async (body) => {
   await MONGO_MODEL.mongoFindOneAndUpdate(
     "products",
     { id },
-    { $set: updateObj },
-    ...(isFeatured === false && { $unset: { isFeatured: 1 }})
+    { $set: updateObj, ...(isFeatured === false && { $unset: { isFeatured: 1 }}) },
+    
   );
   return {
     status: true,
