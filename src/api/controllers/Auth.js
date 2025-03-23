@@ -48,10 +48,20 @@ const login = async (request, response, next) => {
     next()
 }
 
+const adminLogin = async (request, response, next) => {
+    const { body } = request
+    const result = await AuthModel.adminLogin(body)
+    const responseBody = new ResponseBody(200, 'Success', result)
+    response.body = responseBody
+
+    next()
+}
+
 export const AuthController = {
     onBoardCustomer,
     createAdmin,
     login,
     checkCustomer,
-    checkAdmin
+    checkAdmin,
+    adminLogin
 }

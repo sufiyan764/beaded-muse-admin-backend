@@ -9,6 +9,8 @@ const getCategories = async (headers) => {
 
 const addCategory = async (body) => {
   const { name, description } = body;
+  const existingCategory = await MONGO_MODEL.mongoFindOne("categories", { name })
+  if(name.toLowerCase() === existingCategory.name.toLowerCase()) return { status: false, statusCode: 400, message: "Category already exists" }
   const id = await CommonModel.counter("categories");
   const insertObj = {
     id,
@@ -43,12 +45,14 @@ const deleteCategory = async (headers) => {
 
 const updateCategory = async (body) => {
   let { id, name = "", description = "" } = body;
+  const existingCategory = await MONGO_MODEL.mongoFindOne("categories", { name, id: { $ne: id } })
+  if(name.toLowerCase() === existingCategory.name.toLowerCase()) return { status: false, statusCode: 400, message: "Category already exists" }
   const updateObj = {
     ...(name && { name }),
     ...(description && { description }),
   };
   await MONGO_MODEL.mongoFindOneAndUpdate(
-    "suppliers",
+    "categories",
     { id },
     { $set: updateObj }
   );

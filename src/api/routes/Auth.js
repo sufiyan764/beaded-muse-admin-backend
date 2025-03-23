@@ -13,6 +13,7 @@ AuthRouter.post('/createAdmin', WatchTower(AuthController.createAdmin))
 AuthRouter.post('/login', WatchTower(AuthController.login))
 AuthRouter.post('/checkCustomer', WatchTower(AuthController.checkCustomer))
 AuthRouter.post('/checkAdmin', WatchTower(AuthController.checkAdmin))
+AuthRouter.post('/adminLogin', WatchTower(AuthController.adminLogin))
 
 AuthRouter.use(sendResponse)
 

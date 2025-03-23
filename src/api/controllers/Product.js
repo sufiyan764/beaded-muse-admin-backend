@@ -4,8 +4,8 @@ import { ResponseBody } from '../../lib'
 import { ProductModel } from '../models'
 
 const getProducts = async (request, response, next) => {
-    const { headers } = request
-    const result = await ProductModel.getProducts(headers)
+    const { body } = request
+    const result = await ProductModel.getProducts(body)
     const responseBody = new ResponseBody(200, 'Success', result)
     response.body = responseBody
     next()

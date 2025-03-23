@@ -70,10 +70,18 @@ const login = async body => {
     return { status: true, statusCode: 200, message: "Welcome", data: { token, companyName: admin.companyName } }
 }
 
+const adminLogin = async body => {
+    const { email, password } = body
+    const adminExists = await MONGO_MODEL.mongoFindOne("admins", { email, password })
+    if(adminExists?.email) return { status: true, statusCode: 200, message: "Welcome", data: { token, companyName: admin.companyName } }
+    else return { status: false, statusCode: 400, message: "Invalid Credentials for Login" }
+}
+
 export const AuthModel = {
     onBoardCustomer,
     createAdmin,
     login,
     checkCustomer,
-    checkAdmin
+    checkAdmin,
+    adminLogin
 }

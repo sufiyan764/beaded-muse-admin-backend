@@ -2,15 +2,24 @@
 
 import { CommonModel, MONGO_MODEL } from ".";
 
-const getProducts = async (headers) => {
-  const products = await MONGO_MODEL.mongoFind("products", {});
+const getProducts = async (body) => {
+  const { skip, limit } = body
+  const query = {}
+  const options = {
+    skip,
+    limit,
+    sortObj: { _id: -1}
+  }
+  const products = await MONGO_MODEL.mongoFindWithSkipAndLimitWithSort("products", query, options);
   return products;
 };
 
 const addProduct = async (body) => {
-  const { categoryId, name, description, price, stock, images, size, color, neckline, fit, sleeveType, length, rating } = body;
+  const { categoryId, name, description, price, stock, images, size, color, neckline, fit, sleeveType, length, rating, isFeatured } = body;
+  const existingProduct = await MONGO_MODEL.mongoFindOne("products", { name })
+  if(name.toLowerCase() === existingProduct.name.toLowerCase()) return { status: false, statusCode: 400, message: "Product already exists" }
   const id = await CommonModel.counter("products");
-  const insertObj = { id, categoryId, name, description, price, stock, images, size, color, neckline, fit, sleeveType, length, rating };
+  const insertObj = { id, categoryId, name, description, price, stock, images, size, color, neckline, fit, sleeveType, length, rating, isFeatured };
   await MONGO_MODEL.mongoInsertOne("products", insertObj);
   return {
     status: true,
@@ -38,10 +47,13 @@ const deleteProduct = async (headers) => {
 };
 
 const updateProduct = async (body) => {
-  let {  id, categoryId = "", name = "", description = "", price = "", stock = "", images = "", size = "", color = "", neckline = "", fit = "", sleeveType = "", length = "" } = body;
+  let {  id, categoryId = "", name = "", description = "", price = "", stock = "", images = "", size = "", color = "", neckline = "", fit = "", sleeveType = "", length = "", isFeatured = false } = body;
+  const existingProduct = await MONGO_MODEL.mongoFindOne("products", { name, id: { $ne: id } })
+  if(name.toLowerCase() === existingProduct.name.toLowerCase()) return { status: false, statusCode: 400, message: "Product already exists" }
   const updateObj = {
     ...(categoryId && { categoryId }),
     ...(name && { name }),
+    ...(description && { description }),
     ...(price && { price }),
     ...(stock && { stock }),
     ...(images && { images }),
@@ -50,11 +62,14 @@ const updateProduct = async (body) => {
     ...(fit && { fit }),
     ...(sleeveType && { sleeveType }),
     ...(length && { length }),
+    ...(size && { size }),
+    ...(isFeatured && { isFeatured })
   };
   await MONGO_MODEL.mongoFindOneAndUpdate(
-    "suppliers",
+    "products",
     { id },
-    { $set: updateObj }
+    { $set: updateObj },
+    ...(isFeatured === false && { $unset: { isFeatured: 1 }})
   );
   return {
     status: true,

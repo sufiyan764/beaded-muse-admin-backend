@@ -7,6 +7,8 @@ import { SERVER_CONFIG } from '../../config'
 import { AuthRouter } from './Auth'
 import { CategoryRouter } from './Category'
 import { ProductRouter } from './Product'
+import { OrderRouter } from './Order'
+import { CustomerRouter } from './Customer'
 
 const { version } = packageJSON
 
@@ -16,6 +18,8 @@ const Routes = [
   { path: '/auth', router: AuthRouter },
   { path: '/product', router: ProductRouter },
   { path: '/category', router: CategoryRouter },
+  { path: '/order', router: OrderRouter },
+  { path: '/customer', router: CustomerRouter },
 ]
 Routes.init = (app) => {
   if (!app || !app.use) {
