@@ -3,7 +3,7 @@
 import { CommonModel, MONGO_MODEL } from ".";
 
 const getProducts = async (body) => {
-  const { skip, limit } = body
+  const { skip = 0, limit = 10000 } = body;
   const query = {}
   const options = {
     skip,

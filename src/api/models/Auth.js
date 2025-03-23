@@ -73,7 +73,7 @@ const login = async body => {
 const adminLogin = async body => {
     const { email, password } = body
     const adminExists = await MONGO_MODEL.mongoFindOne("admins", { email, password })
-    if(adminExists?.email) return { status: true, statusCode: 200, message: "Welcome", data: { token, companyName: admin.companyName } }
+    if(adminExists?.email) return { status: true, statusCode: 200, message: "Welcome" }
     else return { status: false, statusCode: 400, message: "Invalid Credentials for Login" }
 }
 
