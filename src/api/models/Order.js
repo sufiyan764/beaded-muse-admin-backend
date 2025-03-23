@@ -11,7 +11,8 @@ const getOrders = async (body) => {
     sortObj: { _id: -1 },
   };
   const orders = await MONGO_MODEL.mongoFindWithSkipAndLimitWithSort("orders", query, options);
-  return orders;
+  const totalCount = await MONGO_MODEL.mongoCountDocuments("orders", query)
+  return { data: orders, totalCount }
 };
 
 const detailOrder = async (headers) => {
