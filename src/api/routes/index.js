@@ -9,10 +9,19 @@ import { CategoryRouter } from './Category'
 import { ProductRouter } from './Product'
 import { OrderRouter } from './Order'
 import { CustomerRouter } from './Customer'
+import ImageKit from 'imagekit'
 
 const { version } = packageJSON
 
 const { SERVICE_NAME } = SERVER_CONFIG
+
+
+
+const imagekit = new ImageKit({
+  publicKey: "public_qlsQraEXHFQH9b6gVeFBlp53dxA=",
+  privateKey: "private_+jWsrZwq8WIvKhZ0B1fx3qbHsl8=",
+  urlEndpoint: "https://ik.imagekit.io/beadedmuse/"
+});
 
 const Routes = [
   { path: '/auth', router: AuthRouter },
@@ -40,6 +49,11 @@ Routes.init = (app) => {
     const responseBody = new ResponseBody(200, 'Success')
     response.status(responseBody.statusCode).json(responseBody)
   })
+  // ImageKit Auth
+  app.get("/auth", (req, res) => {
+    const authParams = imagekit.getAuthenticationParameters();
+    res.send(authParams);
+  });
   // Unknow Routes
   app.use('*', (request, response, next) => {
     const error = {
