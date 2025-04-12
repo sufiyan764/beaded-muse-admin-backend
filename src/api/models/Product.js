@@ -16,11 +16,11 @@ const getProducts = async (body) => {
 };
 
 const addProduct = async (body) => {
-  const { categoryId, name, description, price, stock, images, size, color, neckline, fit, sleeveType, length, rating, isFeatured } = body;
+  const { categoryId, name, description, price, stock, images, size, color, neckline, fit, sleeveType, length, rating, isFeatured, discountPrice = "" } = body;
   const existingProduct = await MONGO_MODEL.mongoFindOne("products", { name })
   if(name.toLowerCase() === existingProduct?.name.toLowerCase()) return { status: false, statusCode: 400, message: "Product already exists" }
   const id = await CommonModel.counter("products");
-  const insertObj = { id, categoryId, name, description, price, stock, images, size, color, neckline, fit, sleeveType, length, rating, isFeatured };
+  const insertObj = { id, categoryId, name, description, price, stock, images, size, color, neckline, fit, sleeveType, length, rating, isFeatured, ...(discountPrice && { discountPrice }) };
   await MONGO_MODEL.mongoInsertOne("products", insertObj);
   return {
     status: true,
@@ -48,7 +48,7 @@ const deleteProduct = async (headers) => {
 };
 
 const updateProduct = async (body) => {
-  let {  id, categoryId = "", name = "", description = "", price = "", stock = "", images = "", size = "", color = "", neckline = "", fit = "", sleeveType = "", length = "", isFeatured = false } = body;
+  let {  id, categoryId = "", name = "", description = "", price = "", stock = "", images = "", size = "", color = "", neckline = "", fit = "", sleeveType = "", length = "", isFeatured = false, discountPrice = "" } = body;
   const existingProduct = await MONGO_MODEL.mongoFindOne("products", { name, id: { $ne: id } })
   if(name.toLowerCase() === existingProduct?.name.toLowerCase()) return { status: false, statusCode: 400, message: "Product already exists" }
   const updateObj = {
@@ -64,7 +64,8 @@ const updateProduct = async (body) => {
     ...(sleeveType && { sleeveType }),
     ...(length && { length }),
     ...(size && { size }),
-    ...(isFeatured && { isFeatured })
+    ...(isFeatured && { isFeatured }),
+    ...(discountPrice && { discountPrice }),
   };
   await MONGO_MODEL.mongoFindOneAndUpdate(
     "products",

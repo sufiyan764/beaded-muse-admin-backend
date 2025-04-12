@@ -1,25 +1,23 @@
 "use strict";
 
 import { MONGO_MODEL } from ".";
+import { OrderConstants } from "../constants";
 
 const getOrders = async (body) => {
   const { skip = 0, limit = 10000 } = body;
-  const query = {};
-  const options = {
-    skip,
-    limit,
-    sortObj: { _id: -1 },
-  };
-  const orders = await MONGO_MODEL.mongoFindWithSkipAndLimitWithSort("orders", query, options);
-  const totalCount = await MONGO_MODEL.mongoCountDocuments("orders", query)
-  return { data: orders, totalCount }
+  const allOrdersQuery = OrderConstants.allOrders(skip, limit)
+  const orders = await MONGO_MODEL.mongoAggregate("orders", allOrdersQuery)
+  const totalCount = await MONGO_MODEL.mongoCountDocuments("orders", {})
+  return { orders, totalCount }
 };
 
-const detailOrder = async (headers) => {
-  let { id } = headers;
+const detailOrder = async (body) => {
+  let { id } = body;
   id = parseInt(id)
-  const category = await MONGO_MODEL.mongoFindOne("orders", { id });
-  return category;
+  const orderDetailQuery = OrderConstants.orderDetail(id)
+  let order = await MONGO_MODEL.mongoAggregate("orders", orderDetailQuery);
+  order = order?.[0] || {}
+  return order;
 };
 
 const deleteOrder = async (headers) => {

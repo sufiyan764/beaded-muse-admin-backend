@@ -12,8 +12,8 @@ const getOrders = async (request, response, next) => {
 }
 
 const detailOrder = async (request, response, next) => {
-    const { headers } = request
-    const result = await OrderModel.detailOrder(headers)
+    const { body } = request
+    const result = await OrderModel.detailOrder(body)
     const responseBody = new ResponseBody(200, 'Success', result)
     response.body = responseBody
     next()

@@ -8,8 +8,8 @@ const { sendResponse } = SendResponse
 
 const OrderRouter = new Express.Router()
 
-OrderRouter.get('/', WatchTower(OrderController.getOrders))
-OrderRouter.get('/detail', WatchTower(OrderController.detailOrder))
+OrderRouter.post('/', WatchTower(OrderController.getOrders))
+OrderRouter.post('/detail', WatchTower(OrderController.detailOrder))
 OrderRouter.delete('/delete', WatchTower(OrderController.deleteOrder))
 OrderRouter.put('/update', WatchTower(OrderController.updateOrder))
 
