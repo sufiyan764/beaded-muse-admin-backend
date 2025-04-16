@@ -50,7 +50,7 @@ Routes.init = (app) => {
     response.status(responseBody.statusCode).json(responseBody)
   })
   // ImageKit Auth
-  app.get("/auth", (req, res) => {
+  app.get("/authImage", (req, res) => {
     const authParams = imagekit.getAuthenticationParameters();
     res.send(authParams);
   });
