@@ -17,7 +17,7 @@ const Server = async App => {
         mongoClientDB = mongoClientUse.db(MONGO_DBNAME)
         console.log(`[Info] Connected to MongoDb with database: ${MONGO_DBNAME}`)
 
-        await App.listen(PORT)
+        await App.listen(PORT, '0.0.0.0')
         console.log(`[Info] Server Started Successfully! Listening on Port: ${PORT}`)
 
     } catch (error) {
