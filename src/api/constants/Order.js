@@ -8,9 +8,13 @@ const allOrders = (skip, limit) => {
     {
       $lookup: {
         from: "customers",
-        localField: "customerId",
-        foreignField: "_id",
+        let: { customerId: { $toObjectId: "$customerId" } },
         pipeline: [
+          {
+            $match: {
+              $expr: { $eq: ["$_id", "$$customerId"] }
+            }
+          },
           {
             $project: {
               _id: 0,
@@ -53,9 +57,13 @@ const orderDetail = (id) => {
     {
       $lookup: {
         from: "customers",
-        localField: "customerId",
-        foreignField: "_id",
+        let: { customerId: { $toObjectId: "$customerId" } },
         pipeline: [
+          {
+            $match: {
+              $expr: { $eq: ["$_id", "$$customerId"] }
+            }
+          },
           {
             $project: {
               _id: 0,
